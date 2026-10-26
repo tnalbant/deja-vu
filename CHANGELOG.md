@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   --context-search --timeout 8000 --include-tools context_search` (#5662).
 ### Changed
 
+- The instructions, skills and extensions no longer tell the agent that a
+  recalled rule outranks its defaults. Recall is untrusted reference data from
+  past transcripts: the agent names the rule in one line and asks before it
+  changes a command, a file write or a config. The standing-decisions block
+  says the same (#5676).
 - The per-prompt line names the agent the memory came from and how long ago:
   `deja-vu — from Codex CLI, 4 months ago: "<quote>" (via <terms>)`, where it
   used to say only "you have been here" and a date. The gates are unchanged:
@@ -38,6 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `Continue sessions can't be deleted yet: deja has not checked how Continue
   lists them` — where the CLI's own prefix made it read `deja: deja can't delete
   Continue sessions yet`. From @tnalbant (#5654, #5675).
+- Amp threads the plugin writes are filed under the workspace Amp has open,
+  not `amp/plugins`. The plugin took `process.cwd()` for the thread's
+  directory, and Amp runs a plugin from `~/.config/amp/plugins`, so every
+  thread and every hook it sent named that directory. It now reads
+  `amp.system.workspaceRoot`. Run `deja install amp-auto` again to rewrite the
+  plugin; threads already written are corrected the next time they end a
+  turn (#5672).
 - opencode shows the per-prompt line. The plugins kept only the model's half
   of the reply, so the line reached nobody while deja counted it shown and
   held the next one back twenty minutes. opencode 1.x and Kilo now toast it.
