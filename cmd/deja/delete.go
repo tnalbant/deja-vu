@@ -70,7 +70,9 @@ func deleteTakes() []string {
 	for h := range cliStores {
 		names = append(names, agentName(h))
 	}
-	slices.Sort(names)
+	slices.SortFunc(names, func(a, b string) int {
+		return strings.Compare(strings.ToLower(a), strings.ToLower(b))
+	})
 	return names
 }
 
